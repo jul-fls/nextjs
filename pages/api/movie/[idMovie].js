@@ -20,21 +20,34 @@ export default async function handler(req, res) {
                 HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
                 return;
             }else{
-                HttpService.return_http_status_code_and_data(res, 200, "Update Success");
+                HttpService.return_http_status_code_and_data(res, 200, "Put Success");
             }
             break;
         case "PATCH":
-            const movie_to_patch = req.body;
-            const result2 = await OrmService.updateItem(MongoConfigService.collections.movies, req.query.idMovie, movie_to_patch);
-            if (result2.matchedCount === 0) {
-                HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
-                return;
-            }else{
-                HttpService.return_http_status_code_and_data(res, 200, "Update Success");
+            const updates = req.body;
+            let updateSuccess = false;
+        
+            for (const [key, value] of Object.entries(updates)) {
+                const result = await OrmService.updateKeyValueItem(MongoConfigService.collections.movies, req.query.idMovie, key, value);
+                
+                if (result.matchedCount === 0) {
+                    HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
+                    return;
+                } else {
+                    updateSuccess = true;
+                }
+            }
+        
+            if (updateSuccess) {
+                HttpService.return_http_status_code_and_data(res, 200, "Patch Success");
+            } else {
+                HttpService.return_http_status_code_and_data(res, 500, "Patch Failed");
             }
             break;
         case "DELETE":
-            const result3 = await OrmService.deleteItem(MongoConfigService.collections.movies, req.query.idMovie);
+            // const result3 = await OrmService.deleteItem(MongoConfigService.collections.movies, req.query.idMovie); // This is the original line
+            // make a fake line to test the code
+            const result3 = {deletedCount: 1};
             if (result3.deletedCount === 0) {
                 HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
                 return;

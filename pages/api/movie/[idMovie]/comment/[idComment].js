@@ -26,24 +26,33 @@ export default async function handler(req, res) {
                 HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
             }else{
                 const comment = req.body;
-                const comment_to_put = OrmService.updateItem(MongoConfigService.collections.comments, req.query.idComment, comment);
+                const comment_to_put = await OrmService.updateItem(MongoConfigService.collections.comments, req.query.idComment, comment);
                 if (comment_to_put.matchedCount === 0) {
                     HttpService.return_http_status_code_and_data(res, 404, "Comment Not Found");
                 }else{
-                    HttpService.return_http_status_code_and_data(res, 200, "Update Success");
+                    HttpService.return_http_status_code_and_data(res, 200, "Put Success");
                 }
             }
             break;
         case "PATCH":
-            if (!movie) {
-                HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
+            const updates = req.body;
+            let updateSuccess = false;
+        
+            for (const [key, value] of Object.entries(updates)) {
+                const result = await OrmService.updateKeyValueItem(MongoConfigService.collections.comments, req.query.idComment, key, value);
+                
+                if (result.matchedCount === 0) {
+                    HttpService.return_http_status_code_and_data(res, 404, "Comment Not Found");
+                    return;
+                } else {
+                    updateSuccess = true;
+                }
             }
-            const comment_to_patch = req.body;
-            const result2 = await OrmService.updateItem(MongoConfigService.collections.comments, req.query.idComment, comment_to_patch);
-            if (result2.matchedCount === 0) {
-                HttpService.return_http_status_code_and_data(res, 404, "Comment Not Found");
-            }else{
-                HttpService.return_http_status_code_and_data(res, 200, "Update Success");
+        
+            if (updateSuccess) {
+                HttpService.return_http_status_code_and_data(res, 200, "Patch Success");
+            } else {
+                HttpService.return_http_status_code_and_data(res, 500, "Patch Failed");
             }
             break;
         case "DELETE":

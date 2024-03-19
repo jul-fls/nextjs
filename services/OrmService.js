@@ -29,6 +29,14 @@ export const OrmService = {
             { returnDocument: "after" }
         );
     },
+    updateKeyValueItem: async (dbName,itemId,key,value) => {
+        const db = await connectToDb();
+        return await db.collection(dbName).findOneAndUpdate(
+            { _id: new ObjectID(itemId) },
+            { $set: { [key]: value } },
+            { returnDocument: "after" }
+        );
+    },
     deleteItem: async (dbName,itemId) => {
         const db = await connectToDb();
         return await db.collection(dbName).findOneAndDelete({_id: new ObjectID(itemId)});
