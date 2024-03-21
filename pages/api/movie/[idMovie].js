@@ -50,9 +50,7 @@ export default async function handler(req, res) {
             }
             break;
         case "DELETE":
-            // const result3 = await OrmService.deleteItem(MongoConfigService.collections.movies, req.query.idMovie); // This is the original line
-            // make a fake line to test the code
-            const result3 = {deletedCount: 1,matchedCount: 1};
+            const result3 = await OrmService.deleteItem(MongoConfigService.collections.movies, req.query.idMovie);
             if(resul3.matchedCount === 0){
                 HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
                 return;

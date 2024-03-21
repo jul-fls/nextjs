@@ -27,7 +27,6 @@ export default async function handler(req, res) {
                 return;
             }else{
                 if (createdItem.insertedId) {
-                    // increase "num_mflix_comments" in "movies" collection
                     movie.num_mflix_comments++;
                     await OrmService.updateItem(MongoConfigService.collections.movies, req.query.idMovie, movie);
 
