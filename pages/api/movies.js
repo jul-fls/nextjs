@@ -9,6 +9,8 @@ export default async function handler(req, res) {
             let movies = await OrmService.getItems(MongoConfigService.collections.movies);
             if (movies.length > 0) {
                 HttpService.return_http_status_code_and_data(res, 200, movies);
+            }else{
+                HttpService.return_http_status_code_and_data(res, 404, "No Movies Found");
             }
             break;
         case "POST":

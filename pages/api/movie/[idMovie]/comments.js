@@ -22,14 +22,19 @@ export default async function handler(req, res) {
             const comment = req.body;
             comment.movie_id = req.query.idMovie;
             let createdItem = await OrmService.createItem(MongoConfigService.collections.comments, comment);
-            if (createdItem.insertedId) {
-                // increase "num_mflix_comments" in "movies" collection
-                movie.num_mflix_comments++;
-                await OrmService.updateItem(MongoConfigService.collections.movies, req.query.idMovie, movie);
-
-                HttpService.return_http_status_code_and_data(res, 201, createdItem.insertedId);
+            if (!movie) {
+                HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
+                return;
             }else{
-                HttpService.return_http_status_code_and_data(res, 500, "Insert Failed");
+                if (createdItem.insertedId) {
+                    // increase "num_mflix_comments" in "movies" collection
+                    movie.num_mflix_comments++;
+                    await OrmService.updateItem(MongoConfigService.collections.movies, req.query.idMovie, movie);
+
+                    HttpService.return_http_status_code_and_data(res, 201, createdItem.insertedId);
+                }else{
+                    HttpService.return_http_status_code_and_data(res, 500, "Insert Failed");
+                }
             }
             break;
         default:

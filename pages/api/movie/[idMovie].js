@@ -20,7 +20,12 @@ export default async function handler(req, res) {
                 HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
                 return;
             }else{
-                HttpService.return_http_status_code_and_data(res, 200, "Put Success");
+                if(result.modifiedCount === 0){
+                    HttpService.return_http_status_code_and_data(res, 500, "Put Failed");
+                    return;
+                }else{
+                    HttpService.return_http_status_code_and_data(res, 200, "Put Success");
+                }
             }
             break;
         case "PATCH":
@@ -47,12 +52,17 @@ export default async function handler(req, res) {
         case "DELETE":
             // const result3 = await OrmService.deleteItem(MongoConfigService.collections.movies, req.query.idMovie); // This is the original line
             // make a fake line to test the code
-            const result3 = {deletedCount: 1};
-            if (result3.deletedCount === 0) {
+            const result3 = {deletedCount: 1,matchedCount: 1};
+            if(resul3.matchedCount === 0){
                 HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
                 return;
             }else{
-                HttpService.return_http_status_code_and_data(res, 200, "Delete Success");
+                if (result3.deletedCount === 0) {
+                    HttpService.return_http_status_code_and_data(res, 500, "Delete Failed");
+                    return;
+                }else{
+                    HttpService.return_http_status_code_and_data(res, 200, "Delete Success");
+                }
             }
             break;
         default:

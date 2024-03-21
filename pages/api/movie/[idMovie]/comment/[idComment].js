@@ -15,7 +15,7 @@ export default async function handler(req, res) {
                     const comment = await OrmService.getItem(MongoConfigService.collections.comments, idComment);
                     if (!comment) {
                         HttpService.return_http_status_code_and_data(res, 404, "Comment Not Found");
-                    }else{
+                    }else {
                         HttpService.return_http_status_code_and_data(res, 200, comment);
                     }
                 }
@@ -24,11 +24,14 @@ export default async function handler(req, res) {
         case "PUT":
             if (!movie) {
                 HttpService.return_http_status_code_and_data(res, 404, "Movie Not Found");
+                return;
             }else{
                 const comment = req.body;
                 const comment_to_put = await OrmService.updateItem(MongoConfigService.collections.comments, req.query.idComment, comment);
                 if (comment_to_put.matchedCount === 0) {
                     HttpService.return_http_status_code_and_data(res, 404, "Comment Not Found");
+                }else if(comment_to_put.modifiedCount === 0){
+                    HttpService.return_http_status_code_and_data(res, 500, "Put Failed");
                 }else{
                     HttpService.return_http_status_code_and_data(res, 200, "Put Success");
                 }
