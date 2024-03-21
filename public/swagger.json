@@ -1,0 +1,674 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Movies API",
+      "version": "1.0.0"
+    },
+    "schemes": [
+      "http"
+    ],
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/movies": {
+        "get": {
+          "summary": "Get all movies",
+          "description": "Returns all movies",
+          "operationId": "getMovies",
+          "responses": {
+            "200": {
+              "description": "A list of movies",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Movie"
+                }
+              }
+            },
+            "404": {
+              "description": "No movies found"
+            }
+          },
+          "tags": [
+            "Movies"
+          ]
+        },
+        "post": {
+          "summary": "Create a new movie",
+          "description": "Creates a new movie",
+          "operationId": "createMovie",
+          "parameters": [
+            {
+              "name": "movie",
+              "in": "body",
+              "description": "The movie to create",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Movie"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "The id of the created movie",
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          },
+          "tags": [
+            "Movies"
+          ]
+        }
+      },
+      "/movies/{id}": {
+        "get": {
+          "summary": "Get a movie by id",
+          "description": "Returns a movie by id",
+          "operationId": "getMovieById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A movie",
+              "schema": {
+                "$ref": "#/definitions/Movie"
+              }
+            },
+            "404": {
+              "description": "Movie not found"
+            }
+          },
+          "tags": [
+            "Movie"
+          ]
+        },
+        "put": {
+          "summary": "Update a movie by id",
+          "description": "Updates a movie by id",
+          "operationId": "putMovieById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "movie",
+              "in": "body",
+              "description": "The movie to update",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Movie"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Movie updated"
+            },
+            "404": {
+              "description": "Movie not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          },
+          "tags": [
+            "Movie"
+          ]
+        },
+        "patch": {
+          "summary": "Update a movie by id",
+          "description": "Updates a movie by id",
+          "operationId": "patchMovieById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "keyValue",
+              "in": "body",
+              "description": "The movie to update",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "example": {
+                  "rated": "PEGI-18"
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Movie updated"
+            },
+            "404": {
+              "description": "Movie not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          },
+          "tags": [
+            "Movie"
+          ]
+        },
+        "delete": {
+          "summary": "Delete a movie by id",
+          "description": "Deletes a movie by id",
+          "operationId": "deleteMovieById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Movie deleted"
+            },
+            "404": {
+              "description": "Movie not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          },
+          "tags": [
+            "Movie"
+          ]
+        }
+      },
+      "/movies/{id}/comments": {
+        "get": {
+          "summary": "Get all comments for a movie",
+          "description": "Returns all comments for a movie",
+          "operationId": "getComments",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of comments",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Comment"
+                }
+              }
+            },
+            "404": {
+              "description": "No comments found"
+            }
+          },
+          "tags": [
+            "Comments"
+          ]
+        },
+        "post": {
+          "summary": "Create a new comment for a movie",
+          "description": "Creates a new comment for a movie",
+          "operationId": "createComment",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "comment",
+              "in": "body",
+              "description": "The comment to create",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Comment"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "The id of the created comment",
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            },
+            "404": {
+              "description": "Movie not found"
+            }
+          },
+          "tags": [
+            "Comments"
+          ]
+        }
+      },
+      "/movies/{id}/comments/{commentId}": {
+        "get": {
+          "summary": "Get a comment by id",
+          "description": "Returns a comment by id",
+          "operationId": "getCommentById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "commentId",
+              "in": "path",
+              "description": "The id of the comment",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A comment",
+              "schema": {
+                "$ref": "#/definitions/Comment"
+              }
+            },
+            "404": {
+              "description": "Comment not found"
+            }
+          },
+          "tags": [
+            "Comment"
+          ]
+        },
+        "put": {
+          "summary": "Update a comment by id",
+          "description": "Updates a comment by id",
+          "operationId": "putCommentById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "commentId",
+              "in": "path",
+              "description": "The id of the comment",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "comment",
+              "in": "body",
+              "description": "The comment to update",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Comment"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Comment updated"
+            },
+            "404": {
+              "description": "Comment not found or movie not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          },
+          "tags": [
+            "Comment"
+          ]
+        },
+        "patch": {
+          "summary": "Update a comment by id",
+          "description": "Updates a comment by id",
+          "operationId": "patchCommentById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "commentId",
+              "in": "path",
+              "description": "The id of the comment",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "keyValue",
+              "in": "body",
+              "description": "The comment to update",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "example": {
+                  "key": "value"
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Comment updated"
+            },
+            "404": {
+              "description": "Comment not found or movie not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          },
+          "tags": [
+            "Comment"
+          ]
+        },
+        "delete": {
+          "summary": "Delete a comment by id",
+          "description": "Deletes a comment by id",
+          "operationId": "deleteCommentById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the movie",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "name": "commentId",
+              "in": "path",
+              "description": "The id of the comment",
+              "required": true,
+              "type": "string",
+              "format": "uuid"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Comment deleted"
+            },
+            "404": {
+              "description": "Comment not found or movie not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          },
+          "tags": [
+            "Comment"
+          ]
+        }
+      }
+    },
+    "definitions": {
+      "Movie": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "plot": {
+            "type": "string",
+            "format": "string"
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "runtime": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "cast": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "poster": {
+            "type": "string",
+            "format": "string"
+          },
+          "title": {
+            "type": "string",
+            "format": "string"
+          },
+          "fullplot": {
+            "type": "string",
+            "format": "string"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "released": {
+            "type": "string",
+            "format": "string"
+          },
+          "directors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "rated": {
+            "type": "string",
+            "format": "string"
+          },
+          "awards": {
+            "type": "object",
+            "properties": {
+              "wins": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "nominations": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "text": {
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          "lastupdated": {
+            "type": "string",
+            "format": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "imdb": {
+            "type": "object",
+            "properties": {
+              "rating": {
+                "type": "number",
+                "format": "double"
+              },
+              "votes": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          "countries": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "type": {
+            "type": "string",
+            "format": "string"
+          },
+          "tomatoes": {
+            "type": "object",
+            "properties": {
+              "viewer": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "numReviews": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "meter": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              },
+              "fresh": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "critic": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "numReviews": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "meter": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              },
+              "rotten": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "lastUpdated": {
+                "type": "string",
+                "format": "string"
+              }
+            },
+            "num_mflix_comments": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+
+        },
+        "description": "Represents a movie"
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "format": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "string"
+          },
+          "movie_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "text": {
+            "type": "string",
+            "format": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "string"
+          }
+        },
+        "description": "Represents a comment"
+      }
+    }
+  }
